@@ -1,0 +1,9 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Houses{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    {% include 'admin/house/_form.html.twig' with {btnText: 'Save'} %}
+</div>
+{% endblock %}
