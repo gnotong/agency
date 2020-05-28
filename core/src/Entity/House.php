@@ -14,8 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class House
 {
-    const HEAT_ELECTRIC = 1;
-    const HEAT_GAS = 2;
+    const HEAT_ELECTRIC = 'electric';
+    const HEAT_GAS = 'gas';
 
     /**
      * @ORM\Id()
@@ -27,57 +27,57 @@ class House
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private ?string $title;
+    private ?string $title = null;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private ?string $description;
+    private ?string $description = null;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private ?int $surface;
+    private ?int $surface = null;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private ?int $rooms;
+    private ?int $rooms = null;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private ?int $bedrooms;
+    private ?int $bedrooms = null;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private ?int $floor;
+    private ?int $floor = null;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private ?int $price;
+    private ?int $price = null;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      */
-    private ?int $heat;
+    private ?string $heat = null;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private ?string $city;
+    private ?string $city = null;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private ?string $address;
+    private ?string $address = null;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      */
-    private ?int $zipCode;
+    private ?string $zipCode = null;
 
     /**
      * @ORM\Column(type="boolean")
@@ -199,12 +199,12 @@ class House
         return $this;
     }
 
-    public function getHeat(): ?int
+    public function getHeat(): ?string
     {
         return $this->heat;
     }
 
-    public function setHeat(int $heat): self
+    public function setHeat(string $heat): self
     {
         $this->heat = $heat;
 
@@ -235,12 +235,12 @@ class House
         return $this;
     }
 
-    public function getZipCode(): ?int
+    public function getZipCode(): ?string
     {
         return $this->zipCode;
     }
 
-    public function setZipCode(int $zipCode): self
+    public function setZipCode(string $zipCode): self
     {
         $this->zipCode = $zipCode;
 
