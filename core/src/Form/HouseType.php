@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use App\Entity\House;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -19,7 +22,12 @@ class HouseType extends AbstractType
             ->add('bedrooms')
             ->add('floor')
             ->add('price')
-            ->add('heat')
+            ->add('heat', ChoiceType::class, [
+                'choices' => [
+                    House::HEAT_ELECTRIC => House::HEAT_ELECTRIC,
+                    House::HEAT_GAS => House::HEAT_GAS
+                ],
+            ])
             ->add('city')
             ->add('address')
             ->add('zipCode')

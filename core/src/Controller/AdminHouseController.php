@@ -37,6 +37,7 @@ class AdminHouseController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
             $manager->persist($house);
             $manager->flush();
+            $this->addFlash('success', 'Record successfully added');
 
             return $this->redirectToRoute('admin_houses');
         }
@@ -56,6 +57,7 @@ class AdminHouseController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $manager->flush();
+            $this->addFlash('success', 'Record successfully updated');
 
             return $this->redirectToRoute('admin_houses');
         }
@@ -74,6 +76,7 @@ class AdminHouseController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $house->getId(), $request->get('_token'))) {
             $manager->remove($house);
             $manager->flush();
+            $this->addFlash('success', 'Record successfully deleted');
         }
 
         return $this->redirectToRoute("admin_houses");

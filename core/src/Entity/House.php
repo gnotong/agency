@@ -7,10 +7,16 @@ namespace App\Entity;
 use App\Repository\HouseRepository;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=HouseRepository::class)
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity(
+ *      fields={"title"},
+ *     message="This title is already in use."
+ * )
  */
 class House
 {
@@ -26,6 +32,7 @@ class House
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(min="5", max="255")
      */
     private ?string $title = null;
 
@@ -61,6 +68,7 @@ class House
 
     /**
      * @ORM\Column(type="string")
+     * @Assert\Choice(callback="getHeats")
      */
     private ?string $heat = null;
 
@@ -76,6 +84,7 @@ class House
 
     /**
      * @ORM\Column(type="string")
+     * @Assert\Regex("/^[0-9]{5}$/")
      */
     private ?string $zipCode = null;
 
@@ -281,5 +290,10 @@ class House
         $this->slug = $slug;
 
         return $this;
+    }
+
+    public static function getHeats(): array
+    {
+        return [self::HEAT_ELECTRIC, self::HEAT_GAS];
     }
 }
