@@ -4,6 +4,13 @@
 
 {% block body %}
 <div class="container mt-4">
-    {{ dump(houses) }}
+    <h1>All houses</h1>
+    <div class="row">
+        {% for house in paginator.getData() %}
+            {% include 'partials/_house.html.twig' %}
+        {% endfor %}
+    </div>
+    {{ paginator.render() }}
+
 </div>
 {% endblock %}

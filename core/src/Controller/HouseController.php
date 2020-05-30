@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\House;
 use App\Repository\HouseRepository;
+use App\Service\Paginator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,12 +14,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class HouseController extends AbstractController
 {
     /**
-     * @Route("/houses", name="house_index")
+     * @Route("/houses/{page<\d+>?1}", name="house_index")
      */
-    public function index(HouseRepository $repository): Response
+    public function index(HouseRepository $repository, Paginator $paginator, int $page): Response
     {
+        $paginator
+            ->setEntityClass(House::class)
+            ->setCurrentPage($page)
+            ->setCriteria(['sold' => false]);
+
         return $this->render('house/index.html.twig', [
-            'houses' => $repository->findLatest(),
+            'paginator' => $paginator,
         ]);
     }
 
