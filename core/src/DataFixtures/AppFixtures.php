@@ -34,20 +34,20 @@ class AppFixtures extends Fixture
         $manager->persist($admin);
 
         // Create some houses
-        $heats = [House::HEAT_ELECTRIC, House::HEAT_GAS];
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 100; $i++) {
             $bedrooms = mt_rand(1, 4);
             $surface  = $bedrooms * 25;
             $house    = (new House())
-                ->setTitle($faker->words(mt_rand(2, 5), true))
-                ->setAddress($faker->address)
+                ->setTitle($faker->words(mt_rand(2, 3), true))
+                ->setAddress($faker->streetAddress)
                 ->setCity($faker->city)
-                ->setZipCode($faker->postcode)
+                ->setSold($faker->randomElement([true, false]))
+                ->setZipCode(explode('-', $faker->postcode, 5)[0])
                 ->setBedrooms($bedrooms)
                 ->setDescription($faker->text)
                 ->setFloor(mt_rand(1, 4))
                 ->setPrice(mt_rand(150000, 540000))
-                ->setHeat($heats[mt_rand(0, 1)])
+                ->setHeat($faker->randomElement([House::HEAT_ELECTRIC, House::HEAT_GAS]))
                 ->setRooms(++$bedrooms)
                 ->setSurface($surface);
             $manager->persist($house);
