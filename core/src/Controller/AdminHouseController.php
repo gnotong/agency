@@ -21,7 +21,7 @@ class AdminHouseController extends AbstractController
     public function index(HouseRepository $repository)
     {
         return $this->render('admin/house/index.html.twig', [
-            'houses' => $repository->findAll(),
+            'houses' => $repository->findAllForSale(),
         ]);
     }
 

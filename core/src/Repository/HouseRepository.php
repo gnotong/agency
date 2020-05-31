@@ -7,6 +7,7 @@ namespace App\Repository;
 use App\Entity\House;
 use App\Entity\HouseSearch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,7 +15,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method House|null find($id, $lockMode = null, $lockVersion = null)
  * @method House|null findOneBy(array $criteria, array $orderBy = null)
  * @method House[]    findAll()
-// * @method House[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method House[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class HouseRepository extends ServiceEntityRepository
 {
@@ -26,28 +27,36 @@ class HouseRepository extends ServiceEntityRepository
     /**
      * @return array|House[]
      */
-    public function findAllNotSold(): array
+    public function findAllForSale(): array
     {
         return $this->findVisibleQuery()
             ->getQuery()
             ->getResult();
     }
 
-    public function findByCriteria(HouseSearch $houseSearch): QueryBuilder
+    public function findByHouseSearch(HouseSearch $houseSearch): Query
     {
         $qb = $this->findVisibleQuery();
 
         if (!empty($houseSearch->getPrice())) {
-            $qb->andWhere('h.price >= :price')
+            $qb = $qb->andWhere('h.price >= :price')
                 ->setParameter('price', $houseSearch->getPrice());
         }
 
         if (!empty($houseSearch->getMinSurface())) {
-            $qb->andWhere('h.surface >= :minSurface')
+            $qb = $qb->andWhere('h.surface >= :minSurface')
                 ->setParameter('minSurface', $houseSearch->getMinSurface());
         }
 
-        return $qb;
+        if ($houseSearch->getOptions()->count() > 0) {
+            $k = 0;
+            foreach ($houseSearch->getOptions() as $option) {
+                $k++;
+                $qb = $qb->andWhere(":option$k MEMBER OF h.options")->setParameter("option$k", $option->getId());
+            }
+        }
+
+        return $qb->getQuery();
     }
 
     /**
