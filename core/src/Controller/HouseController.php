@@ -27,7 +27,7 @@ class HouseController extends AbstractController
 
         $paginator
             ->setCurrentPage($page)
-            ->setQueryBuilder($repository->findByCriteria($houseSearch));
+            ->setQuery($repository->findByHouseSearch($houseSearch));
 
         return $this->render('house/index.html.twig', [
             'search_form' => $searchForm->createView(),

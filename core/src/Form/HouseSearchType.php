@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Entity\HouseSearch;
+use App\Entity\Option;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -28,6 +30,13 @@ class HouseSearchType extends AbstractType
                 'attr'     => [
                     'placeholder' => 'Surface min ...'
                 ]
+            ])
+            ->add('options', EntityType::class, [
+                'required'     => false,
+                'label' => false,
+                'class'        => Option::class,
+                'choice_label' => 'name',
+                'multiple'     => true,
             ]);
     }
 

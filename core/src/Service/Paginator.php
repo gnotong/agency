@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Query;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
 
@@ -19,11 +19,11 @@ class Paginator
     private ?string                $routeName;
     private Environment            $twig;
     private string                 $templatePath;
-    private QueryBuilder           $queryBuilder;
+    private Query                  $query;
 
-    const PAGE_NUMBER_MISSING_ERROR  = 'You have to specify the parameter page.
+    const PAGE_NUMBER_MISSING_ERROR = 'You have to specify the parameter page.
             Use setCurrentPage of your paginator service';
-    const QUERY_BUILDER_NOT_DEFINED = 'A query builder needs to be defined when defining your paginator service';
+    const QUERY_NOT_DEFINED = 'A query needs to be defined when defining your paginator service';
 
     public function __construct(
         Environment $twig,
@@ -58,16 +58,15 @@ class Paginator
             throw new \Exception(self::PAGE_NUMBER_MISSING_ERROR);
         }
 
-        if (empty($this->queryBuilder)) {
-            throw new \Exception(self::QUERY_BUILDER_NOT_DEFINED);
+        if (empty($this->query)) {
+            throw new \Exception(self::QUERY_NOT_DEFINED);
         }
 
         $offset = $this->currentPage * $this->limit - $this->limit;
 
-        return $this->queryBuilder
+        return $this->query
             ->setFirstResult($offset)
             ->setMaxResults($this->limit)
-            ->getQuery()
             ->getResult();
     }
 
@@ -76,13 +75,13 @@ class Paginator
      */
     public function getPages(): int
     {
-        if (empty($this->queryBuilder)) {
-            throw new \Exception(self::QUERY_BUILDER_NOT_DEFINED);
+        if (empty($this->query)) {
+            throw new \Exception(self::QUERY_NOT_DEFINED);
         }
-        $total = count($this->queryBuilder
+        $total = count($this->query
             ->setFirstResult(null)
             ->setMaxResults(null)
-            ->getQuery()->getResult());
+            ->getResult());
 
         return (int)ceil($total / $this->limit);
     }
@@ -131,9 +130,9 @@ class Paginator
         return $this;
     }
 
-    public function setQueryBuilder(QueryBuilder $builder): self
+    public function setQuery(Query $query): self
     {
-        $this->queryBuilder = $builder;
+        $this->query = $query;
 
         return $this;
     }
