@@ -3,14 +3,33 @@
 {% block title %}Latest houses{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
-    <h1>All houses</h1>
-    <div class="row">
-        {% for house in paginator.getData() %}
-            {% include 'partials/_house.html.twig' %}
-        {% endfor %}
+    <div class="jumbotron">
+        <div class="container">
+            {{ form_start(search_form) }}
+            <div class="form-row align-items-end">
+                <div class="col-5">
+                    {{ form_row(search_form.price) }}
+                </div>
+                <div class="col-5">
+                    {{ form_row(search_form.minSurface) }}
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">Search</button>
+                    </div>
+                </div>
+            </div>
+            {{ form_end(search_form) }}
+        </div>
     </div>
-    {{ paginator.render() }}
 
-</div>
+    <div class="container mt-4">
+        <h1>All houses</h1>
+        <div class="row">
+            {% for house in paginator.getData() %}
+                {% include 'partials/_house.html.twig' %}
+            {% endfor %}
+        </div>
+        {{ paginator.render() }}
+    </div>
 {% endblock %}
