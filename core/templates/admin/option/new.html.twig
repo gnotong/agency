@@ -1,0 +1,11 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}New Option{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Adding an option</h1>
+    <hr>
+    {% include 'admin/option/_form.html.twig' with {btnText: 'Add'} %}
+</div>
+{% endblock %}

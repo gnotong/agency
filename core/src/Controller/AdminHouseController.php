@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AdminHouseController extends AbstractController
 {
     /**
-     * @Route("/admin/houses", name="admin_houses")
+     * @Route("/admin/houses", name="admin_houses_index")
      */
     public function index(HouseRepository $repository)
     {
@@ -39,7 +39,7 @@ class AdminHouseController extends AbstractController
             $manager->flush();
             $this->addFlash('success', 'Record successfully added');
 
-            return $this->redirectToRoute('admin_houses');
+            return $this->redirectToRoute('admin_houses_index');
         }
 
         return $this->render('admin/house/new.html.twig', [
@@ -59,7 +59,7 @@ class AdminHouseController extends AbstractController
             $manager->flush();
             $this->addFlash('success', 'Record successfully updated');
 
-            return $this->redirectToRoute('admin_houses');
+            return $this->redirectToRoute('admin_houses_index');
         }
 
         return $this->render('admin/house/edit.html.twig', [
@@ -79,6 +79,6 @@ class AdminHouseController extends AbstractController
             $this->addFlash('success', 'Record successfully deleted');
         }
 
-        return $this->redirectToRoute("admin_houses");
+        return $this->redirectToRoute("admin_houses_index");
     }
 }

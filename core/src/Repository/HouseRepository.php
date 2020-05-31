@@ -35,19 +35,19 @@ class HouseRepository extends ServiceEntityRepository
 
     public function findByCriteria(HouseSearch $houseSearch): QueryBuilder
     {
-        $q = $this->findVisibleQuery();
+        $qb = $this->findVisibleQuery();
 
         if (!empty($houseSearch->getPrice())) {
-            $q->andWhere('h.price >= :price')
+            $qb->andWhere('h.price >= :price')
                 ->setParameter('price', $houseSearch->getPrice());
         }
 
         if (!empty($houseSearch->getMinSurface())) {
-            $q->andWhere('h.surface >= :minSurface')
+            $qb->andWhere('h.surface >= :minSurface')
                 ->setParameter('minSurface', $houseSearch->getMinSurface());
         }
 
-        return $q;
+        return $qb;
     }
 
     /**

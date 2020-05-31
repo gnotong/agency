@@ -6,6 +6,8 @@ namespace App\Entity;
 
 use App\Repository\HouseRepository;
 use Cocur\Slugify\Slugify;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -103,9 +105,15 @@ class House
      */
     private ?string $slug;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Option::class, inversedBy="houses")
+     */
+    private Collection $options;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
+        $this->options = new ArrayCollection();
     }
 
     /**
@@ -295,5 +303,33 @@ class House
     public static function getHeats(): array
     {
         return [self::HEAT_ELECTRIC, self::HEAT_GAS];
+    }
+
+    /**
+     * @return Collection|Option[]
+     */
+    public function getOptions(): Collection
+    {
+        return $this->options;
+    }
+
+    public function addOption(Option $option): self
+    {
+        if (!$this->options->contains($option)) {
+            $this->options[] = $option;
+            $option->addHouse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOption(Option $option): self
+    {
+        if ($this->options->contains($option)) {
+            $this->options->removeElement($option);
+            $option->removeHouse($this);
+        }
+
+        return $this;
     }
 }

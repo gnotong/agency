@@ -9,7 +9,6 @@ use App\Entity\HouseSearch;
 use App\Form\HouseSearchType;
 use App\Repository\HouseRepository;
 use App\Service\Paginator;
-use Doctrine\Common\Collections\Criteria;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
