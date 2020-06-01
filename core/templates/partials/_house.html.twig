@@ -3,7 +3,7 @@
         {% if house.imageName %}
             <img src="{{ vich_uploader_asset(house, 'imageFile') | imagine_filter('thumb360x230') }}" alt="" class="card-img-top w-100 h-auto">
         {% else %}
-            <img src="/images/houses/empty.png" alt="" class="card-img-top w-100 h-auto">
+            <img src="/images/empty.png" alt="" class="card-img-top w-100 h-auto">
         {% endif %}
         <div class="card-body">
             <h5 class="card-title text-primary mb-2">
