@@ -28,7 +28,7 @@ class AdminHouseController extends AbstractController
     /**
      * @Route("/admin/houses/new", name="admin_houses_new", methods={"POST", "GET"})
      */
-    public function add(Request $request, EntityManagerInterface $manager): Response
+    public function new(Request $request, EntityManagerInterface $manager): Response
     {
         $house = new House();
         $form = $this->createForm(HouseType::class, $house);
