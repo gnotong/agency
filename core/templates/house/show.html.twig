@@ -3,13 +3,58 @@
 {% block title %}Hello HouseController!{% endblock %}
 
 {% block body %}
-<div class="container">
     <div class="jumbotron">
-        <div class="col-8">picture here</div>
-        <div class="col-4">
-            house details
+        <div class="container">
+            <div class="row">
+                <div class="col-8">
+                    {% if house.imageName %}
+                        <img src="{{ vich_uploader_asset(house, 'imageFile') | imagine_filter('medium') }}" alt=""
+                             class="card-img-top w-100 h-auto">
+                    {% else %}
+                        <img src="/images/houses/empty.png" alt="" class="card-img-top w-100 h-auto">
+                    {% endif %}
+                </div>
+                <div class="col-4">
+                    <h1>{{ house.title }}</h1>
+                    <h2>{{ house.rooms }} rooms - {{ house.surface }} m²</h2>
+                    <div class="text-primary font-weight-bold display-4">{{ house.price|format_currency('EUR', locale='fr') }}</div>
+                    <a href="#" class="btn btn-primary">Contact us</a>
+                </div>
+            </div>
         </div>
     </div>
-
-</div>
+    <div class="container mt-4">
+        <p>{{ house.description }}</p>
+        <div class="row">
+            <div class="col-md-8">
+                <h2>Characteristics</h2>
+                <table class="table table-striped">
+                    <tr>
+                        <td>Surface</td>
+                        <td>{{ house.surface }}</td>
+                    </tr>
+                    <tr>
+                        <td>Rooms</td>
+                        <td>{{ house.rooms }}</td>
+                    </tr>
+                    <tr>
+                        <td>Bedrooms</td>
+                        <td>{{ house.bedrooms }}</td>
+                    </tr>
+                    <tr>
+                        <td>Heating</td>
+                        <td>{{ house.heat }}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-4">
+                <h2>Options</h2>
+                <ul class="list-group">
+                    {% for option in house.options %}
+                        <li class="list-group-item">{{ option.name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
 {% endblock %}
