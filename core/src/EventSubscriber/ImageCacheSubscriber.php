@@ -31,7 +31,7 @@ class ImageCacheSubscriber implements EventSubscriber
         ];
     }
 
-    public function preRemove(LifecycleEventArgs $eventArgs)
+    public function preRemove(LifecycleEventArgs $eventArgs): void
     {
         $entity = $eventArgs->getEntity();
         if (!$entity instanceof House) {
@@ -40,16 +40,18 @@ class ImageCacheSubscriber implements EventSubscriber
         $this->cacheManager->remove($this->uploaderHelper->asset($entity, 'imageFile'));
     }
 
-    public function preUpdate(PreUpdateEventArgs $eventArgs)
+    public function preUpdate(PreUpdateEventArgs $eventArgs): void
     {
         $entity = $eventArgs->getEntity();
         if (!$entity instanceof House) {
             return;
         }
 
-        if ($entity->getImageFile() instanceof UploadedFile) {
-            $this->cacheManager->remove($this->uploaderHelper->asset($entity, 'imageFile'));
+        if (!$entity->getImageFile() instanceof UploadedFile) {
+            return;
         }
+
+        $this->cacheManager->remove($this->uploaderHelper->asset($entity, 'imageFile'));
     }
 
 }

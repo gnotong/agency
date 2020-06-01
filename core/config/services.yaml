@@ -31,6 +31,7 @@ services:
         arguments:
             $templatePath: 'admin/partials/pagination.html.twig'
 
+    # removes images from cache(created by the liip\imagine bundle)
     App\EventSubscriber\ImageCacheSubscriber:
         tags:
             - { name: doctrine.event_subscriber }

@@ -33,8 +33,6 @@
                 {% include 'partials/_house.html.twig' %}
             {% endfor %}
         </div>
-        {% if paginator.getData() | length > 1 %}
-            {{ paginator.render() }}
-        {% endif %}
+        {{ paginator.render() }}
     </div>
 {% endblock %}

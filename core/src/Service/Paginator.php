@@ -41,6 +41,10 @@ class Paginator
      */
     public function render(): void
     {
+        if ($this->getPages() <= 1) {
+            return;
+        }
+
         $this->twig->display($this->templatePath, [
             'pages'     => $this->getPages(),
             'page'      => $this->getCurrentPage(),
