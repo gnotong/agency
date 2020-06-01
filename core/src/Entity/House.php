@@ -9,8 +9,10 @@ use Cocur\Slugify\Slugify;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=HouseRepository::class)
@@ -19,11 +21,12 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *      fields={"title"},
  *     message="This title is already in use."
  * )
+ * @Vich\Uploadable
  */
 class House
 {
     const HEAT_ELECTRIC = 'electric';
-    const HEAT_GAS = 'gas';
+    const HEAT_GAS      = 'gas';
 
     /**
      * @ORM\Id()
@@ -96,24 +99,42 @@ class House
     private ?bool $sold = false;
 
     /**
-     * @ORM\Column(type="datetime")
-     */
-    private ?\DateTimeInterface $createdAt;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private ?string $slug;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $imageName = null;
+
+    /**
+     * @Vich\UploadableField(mapping="house_image", fileNameProperty="imageName")
+     * @Assert\Image(
+     *     mimeTypes="image/jpeg"
+     * )
+     */
+    private ?File $imageFile = null;
 
     /**
      * @ORM\ManyToMany(targetEntity=Option::class, inversedBy="houses")
      */
     private Collection $options;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private ?\DateTimeInterface $updatedAt = null;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private ?\DateTimeInterface $createdAt;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
-        $this->options = new ArrayCollection();
+        $this->options   = new ArrayCollection();
     }
 
     /**
@@ -288,6 +309,18 @@ class House
         return $this;
     }
 
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
     public function getSlug(): ?string
     {
         return $this->slug;
@@ -328,6 +361,37 @@ class House
         if ($this->options->contains($option)) {
             $this->options->removeElement($option);
             $option->removeHouse($this);
+        }
+
+        return $this;
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function setImageName(?string $imageName): self
+    {
+        $this->imageName = $imageName;
+
+        return $this;
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageFile(?File $imageFile = null): self
+    {
+        $this->imageFile = $imageFile;
+
+        if (null !== $imageFile) {
+            $this->setUpdatedAt(new \DateTimeImmutable());
         }
 
         return $this;
