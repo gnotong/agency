@@ -50,5 +50,11 @@ services:
     expose:
       - ${REDIS_PORT}
 
+  maildev:
+    image: maildev/maildev
+    container_name: maildev
+    ports:
+      - 8181:80
+
 volumes:
   db-data: # If we delete mysql image, the previous build db is not lost
