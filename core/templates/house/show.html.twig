@@ -19,6 +19,22 @@
                     <h2>{{ house.rooms }} rooms - {{ house.surface }} m²</h2>
                     <div class="text-primary font-weight-bold display-4">{{ house.price|format_currency('EUR', locale='fr') }}</div>
                     <a href="#" class="btn btn-primary">Contact us</a>
+                    <div id="contactForm" class="mt-4">
+                        {{ form_start(form) }}
+                        <div class="row align-items-end">
+                            <div class="col">{{ form_row(form.firstName) }}</div>
+                            <div class="col">{{ form_row(form.lastName) }}</div>
+                        </div>
+                        <div class="row align-items-end">
+                            <div class="col">{{ form_row(form.phone) }}</div>
+                            <div class="col">{{ form_row(form.email) }}</div>
+                        </div>
+                        <div class="row align-items-end">
+                            <div class="col">{{ form_row(form.message) }}</div>
+                        </div>
+                        <button type="submit" class="btn btn-success">Send</button>
+                        {{ form_end(form) }}
+                    </div>
                 </div>
             </div>
         </div>

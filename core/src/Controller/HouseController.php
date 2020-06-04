@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Contact;
 use App\Entity\House;
 use App\Entity\HouseSearch;
+use App\Form\ContactType;
 use App\Form\HouseSearchType;
 use App\Repository\HouseRepository;
+use App\Service\NotificationContact;
 use App\Service\Paginator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,8 +42,24 @@ class HouseController extends AbstractController
      * @Route("/houses/{slug}/show", name="houses_show")
      * @return Response
      */
-    public function show(House $house): Response
+    public function show(House $house, Request $request, NotificationContact $notification): Response
     {
-        return $this->render('house/show.html.twig', ['house' => $house]);
+        $contact = new Contact();
+        $contact->setHouse($house);
+        $contactForm = $this->createForm(ContactType::class, $contact);
+        $contactForm->handleRequest($request);
+
+        if ($contactForm->isSubmitted() && $contactForm->isValid()) {
+            $notification->notify($contact);
+            $this->addFlash('success', 'Your message has been successfully sent !');
+            return $this->redirectToRoute('houses_show', ['slug' => $house->getSlug()]);
+        }
+
+
+
+        return $this->render('house/show.html.twig', [
+            'house' => $house,
+            'form' => $contactForm->createView(),
+        ]);
     }
 }
