@@ -34,4 +34,14 @@ services:
     # removes images from cache(created by the liip\imagine bundle)
     App\EventSubscriber\ImageCacheSubscriber:
         tags:
+            - { name: doctrine.event_subscriber, priority: 20 }
+    App\EventSubscriber\AttachmentUploadSubscriber:
+        tags:
             - { name: doctrine.event_subscriber }
+        arguments:
+            $imagePath: '%kernel.project_dir%/public/images/houses'
+    App\EventSubscriber\AttachmentCleanerSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber, priority: 10 }
+        arguments:
+            $imagePath: '%kernel.project_dir%/public/images/houses'

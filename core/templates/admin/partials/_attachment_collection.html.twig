@@ -1,0 +1,32 @@
+{% block _house_attachments_widget %}
+    {{ form_widget(form) }}
+    <input type="hidden" value="0" id="widget_counter">
+    <div class="form-group">
+        <button type="button" id="add-image" class="btn btn-primary"> Add image</button>
+    </div>
+{% endblock %}
+
+{% block _house_attachments_entry_row %}
+    {{ form_widget(form) }}
+{% endblock %}
+
+
+{% block _house_attachments_entry_widget %}
+    <div class="form-group" id="block_{{ id }}">
+        <div class="row">
+            <div class="col-10">
+                <div class="row">
+                    <div class="col">
+                        {{ form_widget(form.imageFile) }}
+                        {{ form_errors(form.imageFile) }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-2">
+                <button type="button" data-action="delete" data-target="#block_{{ id }}" class="btn btn-danger">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

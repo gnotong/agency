@@ -77,6 +77,11 @@
         {% endif %}
     </div>
 </div>
+<div class="row">
+    <div class="col">
+        {{ form_row(form.attachments) }}
+    </div>
+</div>
 <button class="btn btn-success" type="submit">{{ btnText }}</button>
 <a class="btn btn-secondary" href="{{ path('admin_houses_index') }}">Back to the list</a>
 {{ form_end(form) }}
