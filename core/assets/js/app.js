@@ -13,4 +13,9 @@ const $ = require('jquery');
 global.$ = global.jQuery = $;
 
 require('bootstrap')
+
+// Helps to display the file name in the form input when uploading a file
+const bsCustomFileInput = require('bs-custom-file-input')
+global.bsCustomFileInput = bsCustomFileInput;
+
 require('select2')

@@ -2,10 +2,16 @@
 
 {% block title %}Houses{% endblock %}
 
+{% form_theme form 'admin/partials/_attachment_collection.html.twig' %}
+
 {% block body %}
 <div class="container mt-4">
     <h1>Edit house: {{ house.title }}</h1>
     <hr>
     {% include 'admin/house/_form.html.twig' with {btnText: 'Save'} %}
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('house') }}
 {% endblock %}

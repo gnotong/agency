@@ -21,6 +21,7 @@ services:
     volumes:
       - ./core/public:/app/symfony:rw,cached
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./docker/nginx/uploadsize.conf:/etc/nginx/conf.d/nginx.conf
     ports:
       - ${NGINX_PORT}:80
     env_file:

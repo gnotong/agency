@@ -9,6 +9,7 @@ use Cocur\Slugify\Slugify;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -131,10 +132,17 @@ class House
      */
     private ?\DateTimeInterface $createdAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Attachment::class, mappedBy="house", orphanRemoval=true, cascade={"persist"})
+     * @Assert\Valid()
+     */
+    private Collection $attachments;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
         $this->options   = new ArrayCollection();
+        $this->attachments = new ArrayCollection();
     }
 
     /**
@@ -378,9 +386,6 @@ class House
         return $this;
     }
 
-    /**
-     * @return File|null
-     */
     public function getImageFile(): ?File
     {
         return $this->imageFile;
@@ -392,6 +397,37 @@ class House
 
         if (null !== $imageFile) {
             $this->setUpdatedAt(new \DateTimeImmutable());
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Attachment[]
+     */
+    public function getAttachments(): Collection
+    {
+        return $this->attachments;
+    }
+
+    public function addAttachment(Attachment $image): self
+    {
+        if (!$this->attachments->contains($image)) {
+            $this->attachments[] = $image;
+            $image->setHouse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttachment(Attachment $image): self
+    {
+        if ($this->attachments->contains($image)) {
+            $this->attachments->removeElement($image);
+            // set the owning side to null (unless already changed)
+            if ($image->getHouse() === $this) {
+                $image->setHouse(null);
+            }
         }
 
         return $this;

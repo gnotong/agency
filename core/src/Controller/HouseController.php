@@ -55,8 +55,6 @@ class HouseController extends AbstractController
             return $this->redirectToRoute('houses_show', ['slug' => $house->getSlug()]);
         }
 
-
-
         return $this->render('house/show.html.twig', [
             'house' => $house,
             'form' => $contactForm->createView(),
