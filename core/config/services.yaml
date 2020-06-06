@@ -35,3 +35,12 @@ services:
     App\EventSubscriber\ImageCacheSubscriber:
         tags:
             - { name: doctrine.event_subscriber }
+
+    # This helps enable twig cache
+    Twig\CacheExtension\CacheProviderInterface:
+        class: Twig\CacheExtension\CacheProvider\PsrCacheAdapter
+    Twig\CacheExtension\CacheStrategyInterface:
+        class: Twig\CacheExtension\CacheStrategy\LifetimeCacheStrategy
+    Twig\CacheExtension\Extension:
+        tags:
+        - { name: twig.extension }

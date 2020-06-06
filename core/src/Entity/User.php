@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -44,6 +45,19 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="string", length=255)
      */
     private ?string $lastName;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     * @Gedmo\Timestampable(on="create")
+     */
+    private ?\DateTimeInterface $updatedAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     */
+    private ?\DateTimeInterface $createdAt;
 
     public function __toString(): string
     {
@@ -114,6 +128,16 @@ class User implements UserInterface, \Serializable
         $this->lastName = $lastName;
 
         return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
     }
 
     /**

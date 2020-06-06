@@ -8,6 +8,7 @@ use App\Repository\OptionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass=OptionRepository::class)
@@ -31,6 +32,19 @@ class Option
      * @ORM\ManyToMany(targetEntity=House::class, mappedBy="options")
      */
     private Collection $houses;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     * @Gedmo\Timestampable(on="create")
+     */
+    private ?\DateTimeInterface $updatedAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     */
+    private ?\DateTimeInterface $createdAt;
 
     public function __construct()
     {
@@ -60,6 +74,16 @@ class Option
     public function getHouses(): Collection
     {
         return $this->houses;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
     }
 
     public function addHouse(House $house): self
