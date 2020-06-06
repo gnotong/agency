@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use App\Repository\AttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -27,7 +28,7 @@ class Attachment
     private ?int $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max="255")
      */
     private ?string $description = null;
@@ -58,11 +59,14 @@ class Attachment
 
     /**
      * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     * @Gedmo\Timestampable(on="create")
      */
-    private ?\DateTimeInterface $updatedAt = null;
+    private ?\DateTimeInterface $updatedAt;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
      */
     private ?\DateTimeInterface $createdAt;
 
@@ -98,7 +102,7 @@ class Attachment
         $this->imageFile = $file;
 
         if (null !== $file) {
-            $this->setUpdatedAt(new \DateTimeImmutable());
+            $this->updatedAt = new \DateTimeImmutable();
         }
 
         return $this;
@@ -121,23 +125,9 @@ class Attachment
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
     }
 
     public function getDescription(): ?string

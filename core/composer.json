@@ -8,6 +8,7 @@
         "cocur/slugify": "^4.0",
         "liip/imagine-bundle": "^2.3",
         "sensio/framework-extra-bundle": "^5.1",
+        "stof/doctrine-extensions-bundle": "^1.4",
         "symfony/asset": "5.0.*",
         "symfony/console": "5.0.*",
         "symfony/dotenv": "5.0.*",
@@ -31,7 +32,9 @@
         "symfony/web-link": "5.0.*",
         "symfony/webpack-encore-bundle": "^1.7",
         "symfony/yaml": "5.0.*",
+        "twig/cache-extension": "^1.4",
         "twig/intl-extra": "^3.0",
+        "twig/twig": "^2.12.5",
         "vich/uploader-bundle": "^1.13"
     },
     "require-dev": {
