@@ -47,8 +47,9 @@
                        class="btn btn-primary"
                        id="contactBtn"
                             {% if form.vars.submitted %} style="display: none" {% endif %}>Contact us</a>
-                    <div id="contactForm" class="mt-4"
-                         {% if not form.vars.submitted %} style="display: none" {% endif %}>
+                    <div id="contactForm"
+                         class="mt-4"
+                            {% if not form.vars.submitted %} style="display: none" {% endif %}>
                         {{ form_start(form) }}
                         <div class="row align-items-end">
                             <div class="col">{{ form_row(form.firstName) }}</div>
@@ -102,4 +103,14 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $('#contactBtn').click(function (e) {
+            e.preventDefault();
+            $('#contactForm').slideDown();
+            $(this).slideUp();
+        })
+    </script>
 {% endblock %}
