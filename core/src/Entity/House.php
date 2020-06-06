@@ -8,6 +8,7 @@ use App\Repository\HouseRepository;
 use Cocur\Slugify\Slugify;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -386,5 +387,14 @@ class House
         }
 
         return $this;
+    }
+
+    public function getAttachementCover(): ?Attachment
+    {
+        $criteria = Criteria::create();
+        $criteria->andWhere(Criteria::expr()->eq('position', Attachment::POSITION_COVER));
+        $attachments = $this->attachments->matching($criteria);
+
+        return $attachments->count() ? $attachments[0] : null;
     }
 }

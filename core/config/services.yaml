@@ -29,7 +29,7 @@ services:
     # This configures the pagination template path for the entire application
     App\Service\Paginator:
         arguments:
-            $templatePath: 'admin/partials/pagination.html.twig'
+            $templatePath: 'admin/partials/_pagination.html.twig'
 
     # removes images from cache(created by the liip\imagine bundle)
     App\EventSubscriber\ImageCacheSubscriber:

@@ -16,12 +16,27 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 class Attachment
 {
+    const POSITION_COVER = 'cover';
+    const POSITION_SLIDES = 'slides';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
     private ?int $id;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\Length(max="255")
+     */
+    private ?string $description = null;
+
+    /**
+     * @ORM\Column(type="string", length=6)
+     * @Assert\Length(max="6")
+     */
+    private ?string $position = self::POSITION_SLIDES;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -122,6 +137,28 @@ class Attachment
     {
         $this->updatedAt = $updatedAt;
 
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    public function getPosition(): ?string
+    {
+        return $this->position;
+    }
+
+    public function setPosition(?string $position): self
+    {
+        $this->position = $position;
         return $this;
     }
 }
