@@ -7,19 +7,48 @@
         <div class="container">
             <div class="row">
                 <div class="col-8">
-                    {% if house.imageName %}
-                        <img src="{{ vich_uploader_asset(house, 'imageFile') | imagine_filter('medium') }}" alt=""
-                             class="card-img-top w-100 h-auto">
-                    {% else %}
-                        <img src="/images/empty.png" alt="" class="card-img-top w-100 h-auto">
-                    {% endif %}
+                    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            {% for attachment in house.attachments %}
+                                <li data-target="#carouselExampleIndicators"
+                                    data-slide-to="{{ loop.index0 }}"
+                                    {% if loop.first %}class="active"{% endif %}></li>
+                            {% endfor %}
+                        </ol>
+                        <div class="carousel-inner">
+                            {% for attachment in house.attachments %}
+                                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                                    <img src="{{ vich_uploader_asset(attachment, 'imageFile') | imagine_filter('medium') }}"
+                                         class="d-block w-100"
+                                         alt="">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h5>{{ attachment.description }}</h5>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button"
+                           data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleControls" role="button"
+                           data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
                 </div>
                 <div class="col-4">
                     <h1>{{ house.title }}</h1>
                     <h2>{{ house.rooms }} rooms - {{ house.surface }} m²</h2>
                     <div class="text-primary font-weight-bold display-4">{{ house.price|format_currency('EUR', locale='fr') }}</div>
-                    <a href="#" class="btn btn-primary">Contact us</a>
-                    <div id="contactForm" class="mt-4">
+                    <a href="#"
+                       class="btn btn-primary"
+                       id="contactBtn"
+                            {% if form.vars.submitted %} style="display: none" {% endif %}>Contact us</a>
+                    <div id="contactForm" class="mt-4"
+                         {% if not form.vars.submitted %} style="display: none" {% endif %}>
                         {{ form_start(form) }}
                         <div class="row align-items-end">
                             <div class="col">{{ form_row(form.firstName) }}</div>
