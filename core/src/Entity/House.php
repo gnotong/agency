@@ -9,11 +9,8 @@ use Cocur\Slugify\Slugify;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\Types\This;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=HouseRepository::class)
@@ -22,7 +19,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *      fields={"title"},
  *     message="This title is already in use."
  * )
- * @Vich\Uploadable
  */
 class House
 {
@@ -103,19 +99,6 @@ class House
      * @ORM\Column(type="string", length=255)
      */
     private ?string $slug;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private ?string $imageName = null;
-
-    /**
-     * @Vich\UploadableField(mapping="house_image", fileNameProperty="imageName")
-     * @Assert\Image(
-     *     mimeTypes="image/jpeg"
-     * )
-     */
-    private ?File $imageFile = null;
 
     /**
      * @ORM\ManyToMany(targetEntity=Option::class, inversedBy="houses")
@@ -369,34 +352,6 @@ class House
         if ($this->options->contains($option)) {
             $this->options->removeElement($option);
             $option->removeHouse($this);
-        }
-
-        return $this;
-    }
-
-    public function getImageName(): ?string
-    {
-        return $this->imageName;
-    }
-
-    public function setImageName(?string $imageName): self
-    {
-        $this->imageName = $imageName;
-
-        return $this;
-    }
-
-    public function getImageFile(): ?File
-    {
-        return $this->imageFile;
-    }
-
-    public function setImageFile(?File $imageFile = null): self
-    {
-        $this->imageFile = $imageFile;
-
-        if (null !== $imageFile) {
-            $this->setUpdatedAt(new \DateTimeImmutable());
         }
 
         return $this;

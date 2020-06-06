@@ -67,16 +67,16 @@
         </div>
     </div>
 </div>
-<div class="row align-items-end">
-    <div class="col-4">
-        {{ form_row(form.imageFile) }}
-    </div>
-    <div class="col-8">
-        {% if house is defined and house.imageName %}
-            <img src="{{ vich_uploader_asset(house) | imagine_filter('thumb100x64') }}" alt="{{ house.imageName }}">
-        {% endif %}
-    </div>
-</div>
+{#<div class="row align-items-end">#}
+{#    <div class="col-4">#}
+{#        {{ form_row(form.imageFile) }}#}
+{#    </div>#}
+{#    <div class="col-8">#}
+{#        {% if house is defined and house.imageName %}#}
+{#            <img src="{{ vich_uploader_asset(house) | imagine_filter('thumb100x64') }}" alt="{{ house.imageName }}">#}
+{#        {% endif %}#}
+{#    </div>#}
+{#</div>#}
 <div class="row">
     <div class="col">
         {{ form_row(form.attachments) }}

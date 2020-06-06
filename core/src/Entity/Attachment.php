@@ -6,11 +6,13 @@ namespace App\Entity;
 
 use App\Repository\AttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=AttachmentRepository::class)
+ * @Vich\Uploadable()
  */
 class Attachment
 {
@@ -24,14 +26,15 @@ class Attachment
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private ?string $image = null;
+    private ?string $imageName = null;
 
     /**
      * @Assert\Image(
      *     mimeTypes="image/jpeg"
      * )
+     * @Vich\UploadableField(mapping="house_attachments", fileNameProperty="imageName")
      */
-    private ?UploadedFile $imageFile = null;
+    private ?File $imageFile = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=House::class, inversedBy="attachments")
@@ -58,28 +61,28 @@ class Attachment
         return $this->id;
     }
 
-    public function getImage(): ?string
+    public function getImageName(): ?string
     {
-        return $this->image;
+        return $this->imageName;
     }
 
-    public function setImage(string $image): self
+    public function setImageName(?string $image): self
     {
-        $this->image = $image;
+        $this->imageName = $image;
 
         return $this;
     }
 
-    public function getImageFile(): ?UploadedFile
+    public function getImageFile(): ?File
     {
         return $this->imageFile;
     }
 
-    public function setImageFile(?UploadedFile $imageFile = null): self
+    public function setImageFile(?File $file = null): self
     {
-        $this->imageFile = $imageFile;
+        $this->imageFile = $file;
 
-        if (null !== $imageFile) {
+        if (null !== $file) {
             $this->setUpdatedAt(new \DateTimeImmutable());
         }
 
