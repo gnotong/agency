@@ -35,7 +35,6 @@ class AdminHouseController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            // subscriber takes care of House attachments upload: AttachmentUploadSubscriber
             foreach ($house->getAttachments() as $attachment) {
                 $attachment->setHouse($house);
                 $manager->persist($attachment);
@@ -61,7 +60,6 @@ class AdminHouseController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // subscriber takes care of House attachments upload: AttachmentCleanerSubscriber
             foreach ($house->getAttachments() as $attachment) {
                 $attachment->setHouse($house);
                 $manager->persist($attachment);
