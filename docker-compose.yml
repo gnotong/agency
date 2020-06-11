@@ -4,6 +4,7 @@ services:
     image: mysql:8.0
     restart: on-failure
     container_name: db
+    hostname: db
     environment:
       MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
       MYSQL_DATABASE: ${DATABASE_NAME}
@@ -44,6 +45,20 @@ services:
       - db
       - redis
 
+  rabbitmq:
+    build:
+      context: .
+      dockerfile: docker/rabbitmq/Dockerfile
+    container_name: rabbitmq
+    hostname: rabbitmq
+    volumes:
+      - rabbitmq-data:/bitnami
+    ports:
+      - ${RABBITMQ_PORT}:${RABBITMQ_PORT}
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+
   redis:
     image: redis
     env_file:
@@ -59,3 +74,4 @@ services:
 
 volumes:
   db-data: # If we delete mysql image, the previous build db is not lost
+  rabbitmq-data:
