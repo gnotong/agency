@@ -1,5 +1,5 @@
 # To specify text which are not real files or dir
-.PHONY: install help up build prune down
+.PHONY: install help up build prune down app dev-assets prod-assets clean
 
 # make|make help, Displays help
 .DEFAULT_GOAL = help
@@ -8,16 +8,28 @@
 DOCKER_COMPOSE =  cd ..; docker-compose
 DOCKER =  cd ..; docker
 
-vendor: composer.json ## Install application dependencies
+EXEC_PHP = $(DOCKER_COMPOSE) exec -T php
+
+vendor: composer.json ## Install symfony application dependencies
 	composer install
 
 composer.lock: composer.json
 	composer update
 
+node_modules: package.json
+	yarn install
+
+package-lock.json: package.json
+	yarn update
+
+dev-assets: node_modules ## Builds dev environment assets
+	yarn run dev
+
+prod-assets: node_modules ## Builds prod environment assets
+	yarn run build
+
 help:
 	@grep -E '(^[a-zA-Z_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-10s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
-
-install: vendor composer.lock  ## Install application
 
 up: down ## Wakes up containers in the detached mode
 	$(DOCKER_COMPOSE) up -d
@@ -35,13 +47,18 @@ bash:
 	$(DOCKER_COMPOSE) exec php bash
 
 fixtures: migration ## Makes data available for the application
-	$(DOCKER_COMPOSE) exec -T php ./bin/console doctrine:fixtures:load --no-interaction
+	$(EXEC_PHP) ./bin/console doctrine:fixtures:load --no-interaction
 
 migration: db-drop db-create ## Updates database schema
-	$(DOCKER_COMPOSE) exec -T php ./bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
+	$(EXEC_PHP) ./bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
 
 db-drop: ## Drops mysql database
-	$(DOCKER_COMPOSE) exec -T php ./bin/console doctrine:database:drop --if-exists --force
+	$(EXEC_PHP) ./bin/console doctrine:database:drop --if-exists --force
 
 db-create: ## Creates mysql database
-	$(DOCKER_COMPOSE) exec -T php ./bin/console doctrine:database:create --if-not-exists
+	$(EXEC_PHP) ./bin/console doctrine:database:create --if-not-exists
+
+app: clean up vendor prod-assets ## Builds vendor and assets. App will be ready
+
+clean: prune ## Stops and clean all containers and volumes; removes node_modules, vendor and public/build folders
+	rm -rf node_modules; rm -rf vendor; rm -rf public/build; rm -rf var
