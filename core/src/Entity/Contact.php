@@ -34,7 +34,7 @@ class Contact
      */
     private ?string $message = null;
 
-    private ?string $houseName;
+    private ?string $houseName = null;
 
     public function getFirstName(): ?string
     {

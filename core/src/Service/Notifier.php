@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\Contact;
+use App\Message\SendNotification;
 use Twig\Environment;
 
 class Notifier
@@ -18,15 +18,16 @@ class Notifier
         $this->environment = $environment;
     }
 
-    public function notify(Contact $contact)
+    public function notify(SendNotification $notification)
     {
-        $message = (new \Swift_Message('Agency: ' . $contact->getHouseName()))
+        $message = (new \Swift_Message('Agency: ' . $notification->houseName))
             ->setFrom('noreply@agency.fr')
             ->setTo('gabriel.notong@gmail.com')
-            ->setReplyTo($contact->getEmail())
+            ->setReplyTo($notification->email)
             ->setBody(
                 $this->environment->render('email/contact.html.twig', [
-                    'contact' => $contact
+                    'contact_name' => $notification->firstName . ' ' . $notification->lastName,
+                    'message' => $notification->message,
                 ]),
                 'text/html'
             );

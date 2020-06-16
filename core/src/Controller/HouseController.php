@@ -51,6 +51,7 @@ class HouseController extends AbstractController
         $contactForm->handleRequest($request);
 
         if ($contactForm->isSubmitted() && $contactForm->isValid()) {
+
             $bus->dispatch(new SendNotification($contact));
 
             $this->addFlash('success', 'Your message has been successfully sent !');
