@@ -34,7 +34,7 @@ class Contact
      */
     private ?string $message = null;
 
-    private ?House $house;
+    private ?string $houseName;
 
     public function getFirstName(): ?string
     {
@@ -91,14 +91,14 @@ class Contact
         return $this;
     }
 
-    public function getHouse(): ?House
+    public function getHouseName(): ?string
     {
-        return $this->house;
+        return $this->houseName;
     }
 
-    public function setHouse(?House $house): self
+    public function setHouseName(?string $houseName): self
     {
-        $this->house = $house;
+        $this->houseName = $houseName;
         return $this;
     }
 }

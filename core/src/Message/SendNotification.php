@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Message;
 
+use App\Entity\Contact;
 
 class SendNotification
 {
-    public string $message;
-    public array $users;
+    public Contact $contact;
 
-    public function __construct(string $message, array $users)
+    public function __construct(Contact $contact)
     {
-        $this->message = $message;
-        $this->users = $users;
+        $this->contact = $contact;
     }
 }

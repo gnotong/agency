@@ -1,5 +1,5 @@
 # To specify text which are not real files or dir
-.PHONY: install help up build prune down app dev-assets prod-assets clean
+.PHONY: install help up build prune down app dev-assets prod-assets clean consume-message
 
 # make|make help, Displays help
 .DEFAULT_GOAL = help
@@ -62,3 +62,6 @@ app: clean up vendor prod-assets ## Builds vendor and assets. App will be ready
 
 clean: prune ## Stops and clean all containers and volumes; removes node_modules, vendor and public/build folders
 	rm -rf node_modules; rm -rf vendor; rm -rf public/build; rm -rf var
+
+consume-message:
+	$(EXEC_PHP) ./bin/console messenger:consume -vv
