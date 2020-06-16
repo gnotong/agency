@@ -7,20 +7,20 @@ namespace App\Service;
 use App\Entity\Contact;
 use Twig\Environment;
 
-class NotificationContact
+class Notifier
 {
     private \Swift_Mailer $mailer;
-    private Environment $environment;
+    private Environment   $environment;
 
     public function __construct(\Swift_Mailer $mailer, Environment $environment)
     {
-        $this->mailer = $mailer;
+        $this->mailer      = $mailer;
         $this->environment = $environment;
     }
 
     public function notify(Contact $contact)
     {
-        $message = (new \Swift_Message('Agency: ' . $contact->getHouse()->getTitle()))
+        $message = (new \Swift_Message('Agency: ' . $contact->getHouseName()))
             ->setFrom('noreply@agency.fr')
             ->setTo('gabriel.notong@gmail.com')
             ->setReplyTo($contact->getEmail())
