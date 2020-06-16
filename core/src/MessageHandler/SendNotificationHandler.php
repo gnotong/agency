@@ -18,6 +18,6 @@ class SendNotificationHandler
 
     public function __invoke(SendNotification $notification)
     {
-        $this->notifier->notify($notification->contact);
+        $this->notifier->notify($notification);
     }
 }
